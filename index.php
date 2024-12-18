@@ -1,7 +1,7 @@
 <?php
-require_once 'API/api.php';
-require_once 'CRUD/read.php';
-require_once 'CRUD/create.php';
+require_once 'api/api.php';
+require_once 'crud/read.php';
+require_once 'crud/create.php';
 
 $weather = null;
 
