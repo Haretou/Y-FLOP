@@ -1,21 +1,19 @@
 <?php
-// Clé API WeatherAPI
-define('API_KEY', '6f5b88ad73d84dc585b132034241812');
-define('BASE_URL', 'https://api.weatherapi.com/v1/');
-
-// Configuration MySQL
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'meteo_db');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-
-// Connexion à la base de données
 function getDatabaseConnection() {
+    $host = 'localhost';  // Hôte de la base de données
+    $dbname = 'meteo_db'; // Nom de la base de données
+    $username = 'root';   // Nom d'utilisateur (par défaut 'root' sur MAMP)
+    $password = '';       // Mot de passe (vide par défaut sur MAMP)
+
     try {
-        return new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASS, [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-        ]);
+        // Créer la connexion à la base de données avec PDO
+        $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+        // Configurer le mode d'erreur de PDO pour afficher les erreurs
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $pdo; // Retourner l'objet PDO
     } catch (PDOException $e) {
-        die('Erreur de connexion : ' . $e->getMessage());
+        echo "Erreur de connexion à la base de données : " . $e->getMessage();
+        return null;
     }
 }
+?>
