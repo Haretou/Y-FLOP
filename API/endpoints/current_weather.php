@@ -7,4 +7,5 @@ if (!empty($_GET['city'])) {
     echo json_encode($weather);
 } else {
     echo json_encode(['error' => 'Ville non spécifiée']);
-}
+} 
+?>
