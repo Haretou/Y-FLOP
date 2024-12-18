@@ -13,7 +13,9 @@ CREATE TABLE Weather (
     temperature FLOAT,
     precipitation FLOAT,
     wind FLOAT,
-    humidity FLOAT
+    humidity FLOAT,
+    ALTER TABLE weather ADD COLUMN description VARCHAR(255);
+
 );
 
 CREATE TABLE searches (
