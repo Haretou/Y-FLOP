@@ -7,7 +7,7 @@ define('BASE_URL', 'https://api.weatherapi.com/v1/');
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'meteo_site');
 define('DB_USER', 'root');
-define('DB_PASS', 'root');
+define('DB_PASS', '');
 
 // Connexion à la base de données
 function getDatabaseConnection() {
