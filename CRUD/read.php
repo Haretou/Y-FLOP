@@ -7,3 +7,4 @@ function getRecentSearches() {
     $stmt = $conn->query('SELECT city, temperature, description FROM searches ORDER BY date DESC LIMIT 5');
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+?>
