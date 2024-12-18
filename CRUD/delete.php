@@ -6,3 +6,4 @@ function deleteSearch($id) {
     $stmt = $conn->prepare('DELETE FROM searches WHERE id = :id');
     $stmt->execute(['id' => $id]);
 }
+?>
