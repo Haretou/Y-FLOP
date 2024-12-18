@@ -3,7 +3,7 @@
 define('API_KEY', '6f5b88ad73d84dc585b132034241812');
 define('BASE_URL', 'https://api.weatherapi.com/v1/');
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'weather_api');
+define('DB_NAME', 'meteo_db');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 
