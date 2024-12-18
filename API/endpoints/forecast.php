@@ -8,3 +8,4 @@ if (!empty($_GET['city'])) {
 } else {
     echo json_encode(['error' => 'Ville non spécifiée']);
 }
+?>
