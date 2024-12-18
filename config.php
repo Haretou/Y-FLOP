@@ -19,3 +19,4 @@ function getDatabaseConnection() {
         die('Erreur de connexion : ' . $e->getMessage());
     }
 }
+?>
