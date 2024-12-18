@@ -10,3 +10,4 @@ function saveSearch($city, $temperature, $description) {
         'description' => $description
     ]);
 }
+?>
