@@ -1,7 +1,7 @@
 <?php
 function getDatabaseConnection() {
     $host = 'localhost';  // Hôte de la base de données
-    $dbname = 'meteo_db'; // Nom de la base de données
+    $dbname = 'meteo_site'; // Nom de la base de données
     $username = 'root';   // Nom d'utilisateur (par défaut 'root' sur MAMP)
     $password = '';       // Mot de passe (vide par défaut sur MAMP)
 
