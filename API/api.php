@@ -14,4 +14,3 @@ function fetchWeatherData($endpoint, $params = []) {
 
     return json_decode($response, true);
 }
-?>

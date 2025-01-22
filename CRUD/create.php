@@ -4,6 +4,13 @@ require_once __DIR__ . '/../config.php';  // Inclure la connexion à la base de 
 // Obtenir la connexion PDO
 $pdo = getDatabaseConnection();
 
+function saveSearch($city, $temperature, $condition) {
+    // Code pour enregistrer les données dans la base de données
+    // Par exemple :
+    $db = new PDO('sqlite:database.db'); // Adapter selon ton environnement
+    $stmt = $db->prepare("INSERT INTO searches (city, temperature, condition) VALUES (?, ?, ?)");
+    $stmt->execute([$city, $temperature, $condition]);}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['city'], $_POST['temperature'])) {
     $city = $_POST['city'];
     $temperature = $_POST['temperature'];

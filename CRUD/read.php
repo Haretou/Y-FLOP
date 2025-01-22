@@ -3,6 +3,12 @@ require_once __DIR__ . '/../config.php';  // Inclure la connexion à la base de 
 
 // Obtenir la connexion PDO
 $pdo = getDatabaseConnection();
+function getRecentSearches($limit = 10) {
+    $db = new PDO('sqlite:database.db'); // Adapter au type de base de données utilisé
+    $stmt = $db->prepare("SELECT city, temperature, description FROM searches ORDER BY created_at DESC LIMIT ?");
+    $stmt->execute([$limit]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
 
 if ($pdo) {
     // Requête SQL pour récupérer les informations combinées des trois tables
@@ -69,5 +75,6 @@ if ($pdo) {
     }
 } else {
     echo "Erreur de connexion à la base de données!";
+}
 }
 ?>
