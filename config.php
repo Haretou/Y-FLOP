@@ -1,4 +1,7 @@
 <?php
+
+    define('BASE_URL', 'http://api.weatherapi.com/v1/');  // URL de base de l'API
+    define('API_KEY','6f5b88ad73d84dc585b132034241812');  // Clé d'API pour accéder à l'API
 function getDatabaseConnection() {
     $host = 'localhost';  // Hôte de la base de données
     $dbname = 'meteo_site'; // Nom de la base de données

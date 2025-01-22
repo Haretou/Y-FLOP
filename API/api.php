@@ -3,6 +3,7 @@ require_once __DIR__ . '/../config.php';
 
 
 function fetchWeatherData($endpoint, $params = []) {
+
     $url = BASE_URL . $endpoint . '?' . http_build_query(array_merge(['key' => API_KEY], $params));
 
     $curl = curl_init();
