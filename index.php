@@ -180,6 +180,9 @@ if (!empty($_POST['city'])) {
             <h2>Météo pour <?= htmlspecialchars($city) ?></h2>
             <p>Température : <?= $weather['current']['temp_c'] ?> °C</p>
             <p>Condition : <?= $weather['current']['condition']['text'] ?></p>
+            <p>Humidité : <?= $weather['current']['humidity'] ?>%</p> <!-- Affichage du taux d'humidité -->
+            <p>Précipitations : <?= isset($weather['current']['precipitation']) ? $weather['current']['precipitation'] . " mm" : "Non disponible" ?></p> <!-- Affichage des précipitations -->
+            <p>Vent : <?= isset($weather['current']['wind_kph']) ? $weather['current']['wind_kph'] . " km/h" : "Non disponible" ?></p> <!-- Affichage du vent -->
         </div>
     <?php endif; ?>
 </body>
