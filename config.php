@@ -4,9 +4,9 @@
     define('API_KEY','6f5b88ad73d84dc585b132034241812');  // Clé d'API pour accéder à l'API
 function getDatabaseConnection() {
     $host = 'localhost';  // Hôte de la base de données
-    $dbname = 'meteo_site'; // Nom de la base de données
+    $dbname = 'meteo_db'; // Nom de la base de données
     $username = 'root';   // Nom d'utilisateur (par défaut 'root' sur MAMP)
-    $password = '';       // Mot de passe (vide par défaut sur MAMP)
+    $password = 'root';       // Mot de passe (vide par défaut sur MAMP)
 
     try {
         // Créer la connexion à la base de données avec PDO
