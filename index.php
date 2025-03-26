@@ -1,9 +1,4 @@
 <?php
-// Activer l'affichage des erreurs
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 require_once 'API/api.php';
 require_once 'CRUD/read.php';
 require_once 'CRUD/create.php';
@@ -17,77 +12,91 @@ if (!empty($_POST['city'])) {
     // Récupérer les données météo actuelles
     $weather = fetchWeatherData('current.json', ['q' => $city]);
     
-    // Débogage - vérifier les données météo actuelles
-    error_log("Données météo actuelles pour $city: " . json_encode($weather));
-    
     // Récupérer les prévisions sur 7 jours
     $forecastData = fetchWeeklyForecast($city);
-    
-    // Débogage - vérifier les données de prévision
-    error_log("Prévisions pour $city: " . json_encode($forecastData));
     
     if (isset($weather['current'])) {
         // Traduire les conditions météorologiques
         $conditions = [
-            'Sunny' => 'Ensoleillé',
-            'Partly cloudy' => 'Partiellement nuageux',
-            'Cloudy' => 'Nuageux',
+            'Sunny' => 'Soleil ça brille les yeux carrément !',
+            'Partly cloudy' => 'Vif du ptit nuage mais trql',
+            'Cloudy' => 'Ptit temps nuageux il fait gris',
             'Overcast' => 'Couvert',
-            'Mist' => 'Brume',
-            'Patchy rain possible' => 'Pluie éparse possible',
+            'Mist' => 'Brume mystique',
+            'Patchy rain possible' => 'Big pluie en perspective',
             'Patchy snow possible' => 'Neige éparse possible',
             'Patchy sleet possible' => 'Neige fondue éparse possible',
             'Patchy freezing drizzle possible' => 'Bruine verglaçante éparse possible',
-            'Thundery outbreaks possible' => 'Orages possibles',
-            'Light rain' => 'Pluie légère',
-            'Moderate rain' => 'Pluie modérée',
-            'Heavy rain' => 'Forte pluie',
-            'Light snow' => 'Neige légère',
+            'Thundery outbreaks possible' => 'Orages possibles fais belek ca gronde',
+            'Light rain' => 'Pluie mignonne',
+            'Moderate rain' => 'Pluie tranquille',
+            'Heavy rain' => 'Il pleut sa mère fais belek',
+            'Light snow' => 'Ptite neige trql zarma Noël',
             'Moderate snow' => 'Neige modérée',
-            'Heavy snow' => 'Forte neige',
+            'Heavy snow' => 'Big neige tah la Russie',
+            'Blowing snow' => 'Neige de fou sa mère',
             'Clear' => 'Clair'
+        ];
+        
+        // Emoji pour chaque condition météo
+        $weatherEmojis = [
+            'Sunny' => '☀️',
+            'Partly cloudy' => '⛅',
+            'Cloudy' => '☁️',
+            'Overcast' => '☁️',
+            'Mist' => '🌫️',
+            'Patchy rain possible' => '🌦️',
+            'Patchy snow possible' => '🌨️',
+            'Patchy sleet possible' => '🌨️',
+            'Patchy freezing drizzle possible' => '🌧️',
+            'Thundery outbreaks possible' => '⛈️',
+            'Light rain' => '🌧️',
+            'Moderate rain' => '🌧️',
+            'Heavy rain' => '🌧️',
+            'Blowing snow' => '🌨️',
+            'Light snow' => '❄️',
+            'Moderate snow' => '❄️',
+            'Heavy snow' => '❄️',
+            'Clear' => '🌟'
         ];
         
         if (isset($weather['current']['condition']['text'])) {
             $conditionText = $weather['current']['condition']['text'];
+            $emoji = isset($weatherEmojis[$conditionText]) ? $weatherEmojis[$conditionText] : '';
+            
             if (array_key_exists($conditionText, $conditions)) {
                 $weather['current']['condition']['text'] = $conditions[$conditionText];
+                $weather['current']['condition']['emoji'] = $emoji;
             }
         }
         
         // Enregistrer la recherche dans la base de données
         $result = saveSearch($city, $weather['current']['temp_c'], $weather['current']['condition']['text']);
-        // Débogage - vérifier si l'enregistrement a fonctionné
-        error_log("Enregistrement de la recherche pour $city: " . ($result ? "succès" : "échec"));
         
         // Traiter et enregistrer les prévisions
         if (isset($forecastData['forecast']['forecastday'])) {
             $forecast = $forecastData['forecast']['forecastday'];
             
-            // Enregistrer chaque jour de prévision dans la base de données
-            foreach ($forecast as $day) {
+            // Ajouter des emoji à chaque prévision
+            foreach ($forecast as $key => $day) {
+                $conditionText = $day['day']['condition']['text'];
+                $emoji = isset($weatherEmojis[$conditionText]) ? $weatherEmojis[$conditionText] : '';
+                $forecast[$key]['day']['condition']['emoji'] = $emoji;
+                
+                // Enregistrer chaque jour de prévision dans la base de données
                 $date = $day['date'];
                 $temp = $day['day']['avgtemp_c'];
-                $conditionText = $day['day']['condition']['text'];
                 
                 // Traduire la condition si elle existe dans notre tableau
-                if (array_key_exists($conditionText, $conditions)) {
-                    $conditionText = $conditions[$conditionText];
-                }
+                $translatedCondition = isset($conditions[$conditionText]) ? $conditions[$conditionText] : $conditionText;
                 
                 $humidity = $day['day']['avghumidity'];
                 $precipitation = $day['day']['totalprecip_mm'];
                 $wind = $day['day']['maxwind_kph'];
                 
-                $forecastResult = saveForecast($city, $date, $temp, $conditionText, $humidity, $precipitation, $wind);
-                // Débogage - vérifier si l'enregistrement des prévisions a fonctionné
-                error_log("Enregistrement prévision pour $city ($date): " . ($forecastResult ? "succès" : "échec"));
+                saveForecast($city, $date, $temp, $translatedCondition, $humidity, $precipitation, $wind);
             }
-        } else {
-            error_log("Pas de données de prévision pour $city");
         }
-    } else {
-        error_log("Pas de données météo actuelles pour $city");
     }
 }
 ?>
@@ -149,6 +158,12 @@ if (!empty($_POST['city'])) {
             font-size: 1rem;
             color: #7f8c8d;
             margin-bottom: 15px;
+        }
+        
+        .emoji {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
         }
 
         form {
@@ -312,34 +327,14 @@ if (!empty($_POST['city'])) {
     <div class="container">
         <header>
             <h1>Y-FLOP Météo</h1>
-            <p>Prévisions météorologiques détaillées et historique des données</p>
+            <p>Prévisions météorologiques détaillées</p>
         </header>
 
         <div class="nav-links">
             <a href="index.php" class="nav-link">Météo Actuelle</a>
-            <a href="trends.php" class="nav-link">Tendances</a>
         </div>
 
         <form method="POST">
-        <div style="background: #fff; padding: 10px; margin: 20px; border: 1px solid #000;">
-    <h3>DEBUG INFO:</h3>
-    <?php if (!empty($_POST['city'])): ?>
-        <p>City: <?= htmlspecialchars($_POST['city']) ?></p>
-        <p>API Response (Current): <?= isset($weather) ? 'OK' : 'Failed' ?></p>
-        <p>API Response (Forecast): <?= isset($forecastData) ? 'OK' : 'Failed' ?></p>
-        <?php if (isset($weather['current'])): ?>
-            <p>Temp: <?= $weather['current']['temp_c'] ?> °C</p>
-            <p>Save Result: <?= var_export($result, true) ?></p>
-        <?php endif; ?>
-        <?php if (isset($forecastData['forecast']['forecastday'])): ?>
-            <p>Number of forecast days: <?= count($forecastData['forecast']['forecastday']) ?></p>
-        <?php else: ?>
-            <p>No forecast data received!</p>
-        <?php endif; ?>
-    <?php else: ?>
-        <p>No city submitted yet</p>
-    <?php endif; ?>
-</div>
             <input type="text" name="city" placeholder="Entrez une ville" required>
             <button type="submit">Rechercher</button>
         </form>
@@ -347,6 +342,7 @@ if (!empty($_POST['city'])) {
         <?php if ($weather): ?>
             <div class="weather-info">
                 <h2>Météo actuelle pour <?= htmlspecialchars($city) ?></h2>
+                <span class="emoji"><?= isset($weather['current']['condition']['emoji']) ? $weather['current']['condition']['emoji'] : '' ?></span>
                 <p>Température : <?= $weather['current']['temp_c'] ?> °C</p>
                 <p>Condition : <?= $weather['current']['condition']['text'] ?></p>
                 <p>Humidité : <?= $weather['current']['humidity'] ?>%</p>
@@ -357,12 +353,13 @@ if (!empty($_POST['city'])) {
 
             <?php if ($forecast): ?>
                 <div class="weather-info">
-                    <h2>Prévisions sur 7 jours pour <?= htmlspecialchars($city) ?></h2>
+                    <h2>Prévisions sur 3 jours pour <?= htmlspecialchars($city) ?></h2>
                     <div class="forecast-container">
                         <?php foreach ($forecast as $index => $day): ?>
                             <div class="forecast-day">
                                 <h3><?= date('d/m', strtotime($day['date'])) ?></h3>
                                 <p><?= date('l', strtotime($day['date'])) ?></p>
+                                <span class="emoji"><?= $day['day']['condition']['emoji'] ?></span>
                                 <p>Temp. Min: <?= $day['day']['mintemp_c'] ?> °C</p>
                                 <p>Temp. Max: <?= $day['day']['maxtemp_c'] ?> °C</p>
                                 <p>Condition: <?= isset($conditions[$day['day']['condition']['text']]) ? $conditions[$day['day']['condition']['text']] : $day['day']['condition']['text'] ?></p>
@@ -375,28 +372,6 @@ if (!empty($_POST['city'])) {
                 </div>
             <?php endif; ?>
         <?php endif; ?>
-        
-        <!-- Section des recherches récentes pour l'apprentissage automatique -->
-        <div class="weather-info">
-            <h2>Tendances et apprentissage automatique</h2>
-            <p>Notre application utilise vos recherches pour améliorer nos prédictions météorologiques grâce à l'apprentissage automatique.</p>
-            
-            <?php
-            // Obtenir les recherches récentes
-            $recentSearches = getRecentSearches($pdo, 5);
-            if (!empty($recentSearches)): ?>
-                <h3>Recherches récentes</h3>
-                <div class="forecast-container">
-                    <?php foreach ($recentSearches as $search): ?>
-                        <div class="forecast-day">
-                            <h3><?= htmlspecialchars($search['city']) ?></h3>
-                            <p>Température: <?= $search['temperature'] ?> °C</p>
-                            <p>Condition: <?= $search['condition'] ?></p>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
-        </div>
     </div>
 </body>
 </html>
