@@ -1,31 +1,93 @@
 <?php
+// Activer l'affichage des erreurs
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require_once 'API/api.php';
 require_once 'CRUD/read.php';
 require_once 'CRUD/create.php';
 
 $weather = null;
+$forecast = null;
 
 if (!empty($_POST['city'])) {
     $city = $_POST['city'];
+    
+    // Récupérer les données météo actuelles
     $weather = fetchWeatherData('current.json', ['q' => $city]);
-
+    
+    // Débogage - vérifier les données météo actuelles
+    error_log("Données météo actuelles pour $city: " . json_encode($weather));
+    
+    // Récupérer les prévisions sur 7 jours
+    $forecastData = fetchWeeklyForecast($city);
+    
+    // Débogage - vérifier les données de prévision
+    error_log("Prévisions pour $city: " . json_encode($forecastData));
+    
     if (isset($weather['current'])) {
-        // Remplacer "sunny" par "ensoleillé"
-        if (isset($weather['current']['condition']['text']) && $weather['current']['condition']['text'] == 'Sunny') {
-            $weather['current']['condition']['text'] = 'Ensoleillé';
+        // Traduire les conditions météorologiques
+        $conditions = [
+            'Sunny' => 'Ensoleillé',
+            'Partly cloudy' => 'Partiellement nuageux',
+            'Cloudy' => 'Nuageux',
+            'Overcast' => 'Couvert',
+            'Mist' => 'Brume',
+            'Patchy rain possible' => 'Pluie éparse possible',
+            'Patchy snow possible' => 'Neige éparse possible',
+            'Patchy sleet possible' => 'Neige fondue éparse possible',
+            'Patchy freezing drizzle possible' => 'Bruine verglaçante éparse possible',
+            'Thundery outbreaks possible' => 'Orages possibles',
+            'Light rain' => 'Pluie légère',
+            'Moderate rain' => 'Pluie modérée',
+            'Heavy rain' => 'Forte pluie',
+            'Light snow' => 'Neige légère',
+            'Moderate snow' => 'Neige modérée',
+            'Heavy snow' => 'Forte neige',
+            'Clear' => 'Clair'
+        ];
+        
+        if (isset($weather['current']['condition']['text'])) {
+            $conditionText = $weather['current']['condition']['text'];
+            if (array_key_exists($conditionText, $conditions)) {
+                $weather['current']['condition']['text'] = $conditions[$conditionText];
+            }
         }
-
-        // Remplacer "partly cloudy" par "nuageux"
-        if (isset($weather['current']['condition']['text']) && $weather['current']['condition']['text'] == 'Partly cloudy') {
-            $weather['current']['condition']['text'] = 'Nuageux';
+        
+        // Enregistrer la recherche dans la base de données
+        $result = saveSearch($city, $weather['current']['temp_c'], $weather['current']['condition']['text']);
+        // Débogage - vérifier si l'enregistrement a fonctionné
+        error_log("Enregistrement de la recherche pour $city: " . ($result ? "succès" : "échec"));
+        
+        // Traiter et enregistrer les prévisions
+        if (isset($forecastData['forecast']['forecastday'])) {
+            $forecast = $forecastData['forecast']['forecastday'];
+            
+            // Enregistrer chaque jour de prévision dans la base de données
+            foreach ($forecast as $day) {
+                $date = $day['date'];
+                $temp = $day['day']['avgtemp_c'];
+                $conditionText = $day['day']['condition']['text'];
+                
+                // Traduire la condition si elle existe dans notre tableau
+                if (array_key_exists($conditionText, $conditions)) {
+                    $conditionText = $conditions[$conditionText];
+                }
+                
+                $humidity = $day['day']['avghumidity'];
+                $precipitation = $day['day']['totalprecip_mm'];
+                $wind = $day['day']['maxwind_kph'];
+                
+                $forecastResult = saveForecast($city, $date, $temp, $conditionText, $humidity, $precipitation, $wind);
+                // Débogage - vérifier si l'enregistrement des prévisions a fonctionné
+                error_log("Enregistrement prévision pour $city ($date): " . ($forecastResult ? "succès" : "échec"));
+            }
+        } else {
+            error_log("Pas de données de prévision pour $city");
         }
-
-        // Remplacer "overcast" par "couvert"
-        if (isset($weather['current']['condition']['text']) && $weather['current']['condition']['text'] == 'Overcast') {
-            $weather['current']['condition']['text'] = 'Couvert';
-        }
-
-        saveSearch($city, $weather['current']['temp_c'], $weather['current']['condition']['text']);
+    } else {
+        error_log("Pas de données météo actuelles pour $city");
     }
 }
 ?>
@@ -34,7 +96,7 @@ if (!empty($_POST['city'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Site Météo</title>
+    <title>Y-FLOP Météo</title>
     <style>
         /* styles.css */
         * {
@@ -47,25 +109,38 @@ if (!empty($_POST['city'])) {
         body {
             background-color: #f0f4f8;
             color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             padding: 20px;
             background-image: linear-gradient(135deg, #74ebd5, #9face6); /* Gradient background */
             font-size: 16px;
         }
 
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
         h1 {
             font-size: 2.5rem;
             color: #2c3e50;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
             text-align: center;
         }
 
         h2 {
             font-size: 1.8rem;
+            color: #34495e;
+            margin-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 1.4rem;
             color: #34495e;
             margin-bottom: 10px;
         }
@@ -87,6 +162,7 @@ if (!empty($_POST['city'])) {
             margin-bottom: 30px;
             width: 100%;
             max-width: 400px;
+            margin: 0 auto;
         }
 
         input[type="text"] {
@@ -127,9 +203,10 @@ if (!empty($_POST['city'])) {
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
             width: 100%;
-            max-width: 400px;
+            max-width: 800px;
             text-align: center;
             font-size: 1.2rem;
+            margin: 20px auto;
         }
 
         .weather-info p {
@@ -140,6 +217,46 @@ if (!empty($_POST['city'])) {
 
         .weather-info h2 {
             color: #2980b9;
+            margin-bottom: 20px;
+        }
+
+        .forecast-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        .forecast-day {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            margin-bottom: 20px;
+            width: calc(25% - 15px);
+            text-align: center;
+        }
+
+        .forecast-day h3 {
+            color: #2980b9;
+            margin-bottom: 10px;
+        }
+
+        .forecast-day p {
+            margin-bottom: 8px;
+            color: #34495e;
+        }
+
+        @media (max-width: 900px) {
+            .forecast-day {
+                width: calc(33.33% - 15px);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .forecast-day {
+                width: calc(50% - 10px);
+            }
         }
 
         @media (max-width: 600px) {
@@ -164,26 +281,122 @@ if (!empty($_POST['city'])) {
                 max-width: 100%;
                 padding: 20px;
             }
+            
+            .forecast-day {
+                width: 100%;
+            }
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .nav-link {
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #3498db;
+            font-weight: bold;
+            margin: 0 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(52, 152, 219, 0.1);
         }
     </style>
 </head>
 <body>
-    <h1>Recherchez la météo</h1>
+    <div class="container">
+        <header>
+            <h1>Y-FLOP Météo</h1>
+            <p>Prévisions météorologiques détaillées et historique des données</p>
+        </header>
 
-    <form method="POST">
-        <input type="text" name="city" placeholder="Entrez une ville" required>
-        <button type="submit">Rechercher</button>
-    </form>
-
-    <?php if ($weather): ?>
-        <div class="weather-info">
-            <h2>Météo pour <?= htmlspecialchars($city) ?></h2>
-            <p>Température : <?= $weather['current']['temp_c'] ?> °C</p>
-            <p>Condition : <?= $weather['current']['condition']['text'] ?></p>
-            <p>Humidité : <?= $weather['current']['humidity'] ?>%</p> <!-- Affichage du taux d'humidité -->
-            <p>Précipitations : <?= isset($weather['current']['precipitation']) ? $weather['current']['precipitation'] . " mm" : "Non disponible" ?></p> <!-- Affichage des précipitations -->
-            <p>Vent : <?= isset($weather['current']['wind_kph']) ? $weather['current']['wind_kph'] . " km/h" : "Non disponible" ?></p> <!-- Affichage du vent -->
+        <div class="nav-links">
+            <a href="index.php" class="nav-link">Météo Actuelle</a>
+            <a href="trends.php" class="nav-link">Tendances</a>
         </div>
+
+        <form method="POST">
+        <div style="background: #fff; padding: 10px; margin: 20px; border: 1px solid #000;">
+    <h3>DEBUG INFO:</h3>
+    <?php if (!empty($_POST['city'])): ?>
+        <p>City: <?= htmlspecialchars($_POST['city']) ?></p>
+        <p>API Response (Current): <?= isset($weather) ? 'OK' : 'Failed' ?></p>
+        <p>API Response (Forecast): <?= isset($forecastData) ? 'OK' : 'Failed' ?></p>
+        <?php if (isset($weather['current'])): ?>
+            <p>Temp: <?= $weather['current']['temp_c'] ?> °C</p>
+            <p>Save Result: <?= var_export($result, true) ?></p>
+        <?php endif; ?>
+        <?php if (isset($forecastData['forecast']['forecastday'])): ?>
+            <p>Number of forecast days: <?= count($forecastData['forecast']['forecastday']) ?></p>
+        <?php else: ?>
+            <p>No forecast data received!</p>
+        <?php endif; ?>
+    <?php else: ?>
+        <p>No city submitted yet</p>
     <?php endif; ?>
+</div>
+            <input type="text" name="city" placeholder="Entrez une ville" required>
+            <button type="submit">Rechercher</button>
+        </form>
+
+        <?php if ($weather): ?>
+            <div class="weather-info">
+                <h2>Météo actuelle pour <?= htmlspecialchars($city) ?></h2>
+                <p>Température : <?= $weather['current']['temp_c'] ?> °C</p>
+                <p>Condition : <?= $weather['current']['condition']['text'] ?></p>
+                <p>Humidité : <?= $weather['current']['humidity'] ?>%</p>
+                <p>Précipitations : <?= isset($weather['current']['precip_mm']) ? $weather['current']['precip_mm'] . " mm" : "Non disponible" ?></p>
+                <p>Vent : <?= isset($weather['current']['wind_kph']) ? $weather['current']['wind_kph'] . " km/h" : "Non disponible" ?></p>
+                <p>Pression : <?= isset($weather['current']['pressure_mb']) ? $weather['current']['pressure_mb'] . " mb" : "Non disponible" ?></p>
+            </div>
+
+            <?php if ($forecast): ?>
+                <div class="weather-info">
+                    <h2>Prévisions sur 7 jours pour <?= htmlspecialchars($city) ?></h2>
+                    <div class="forecast-container">
+                        <?php foreach ($forecast as $index => $day): ?>
+                            <div class="forecast-day">
+                                <h3><?= date('d/m', strtotime($day['date'])) ?></h3>
+                                <p><?= date('l', strtotime($day['date'])) ?></p>
+                                <p>Temp. Min: <?= $day['day']['mintemp_c'] ?> °C</p>
+                                <p>Temp. Max: <?= $day['day']['maxtemp_c'] ?> °C</p>
+                                <p>Condition: <?= isset($conditions[$day['day']['condition']['text']]) ? $conditions[$day['day']['condition']['text']] : $day['day']['condition']['text'] ?></p>
+                                <p>Humidité: <?= $day['day']['avghumidity'] ?>%</p>
+                                <p>Précip.: <?= $day['day']['totalprecip_mm'] ?> mm</p>
+                                <p>Vent: <?= $day['day']['maxwind_kph'] ?> km/h</p>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
+        
+        <!-- Section des recherches récentes pour l'apprentissage automatique -->
+        <div class="weather-info">
+            <h2>Tendances et apprentissage automatique</h2>
+            <p>Notre application utilise vos recherches pour améliorer nos prédictions météorologiques grâce à l'apprentissage automatique.</p>
+            
+            <?php
+            // Obtenir les recherches récentes
+            $recentSearches = getRecentSearches($pdo, 5);
+            if (!empty($recentSearches)): ?>
+                <h3>Recherches récentes</h3>
+                <div class="forecast-container">
+                    <?php foreach ($recentSearches as $search): ?>
+                        <div class="forecast-day">
+                            <h3><?= htmlspecialchars($search['city']) ?></h3>
+                            <p>Température: <?= $search['temperature'] ?> °C</p>
+                            <p>Condition: <?= $search['condition'] ?></p>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
 </body>
 </html>

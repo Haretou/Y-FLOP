@@ -15,14 +15,27 @@ CREATE TABLE Weather (
     wind FLOAT,
     humidity FLOAT,
     description VARCHAR(255)
-
 );
 
 CREATE TABLE searches (
     id INT AUTO_INCREMENT PRIMARY KEY,
     city VARCHAR(255) NOT NULL,
     temperature FLOAT NOT NULL,
+    `condition` VARCHAR(255),
     search_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Nouvelle table pour stocker les prévisions météo
+CREATE TABLE weather_forecasts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    city VARCHAR(255) NOT NULL,
+    forecast_date DATE NOT NULL,
+    temperature FLOAT NOT NULL,
+    `condition` VARCHAR(255) NOT NULL,
+    humidity FLOAT,
+    precipitation FLOAT,
+    wind FLOAT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE Time (
@@ -44,20 +57,3 @@ VALUES ('1', 'Occitanie', 'Montpellier', 22.5, 0.0, 12.3, 60.0);
 
 INSERT INTO Time (id, day, hour, weather_id, place_id) 
 VALUES (1, '2024-12-18', '10:00:00', '1', '1');
-
--- Requête pour afficher toutes les informations
-SELECT 
-    Place.Name AS Place_Name, 
-    Place.Latitude, 
-    Place.Longitude, 
-    Weather.State, 
-    Weather.Town, 
-    Weather.temperature, 
-    Weather.precipitation, 
-    Weather.wind, 
-    Weather.humidity, 
-    Time.day, 
-    Time.hour
-FROM Place
-JOIN Time ON Place.id = Time.place_id
-JOIN Weather ON Time.weather_id = Weather.id;

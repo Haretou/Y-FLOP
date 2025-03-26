@@ -6,17 +6,39 @@ $pdo = getDatabaseConnection();
 
 function getRecentSearches($pdo, $limit = 10) {
     if (!$pdo) {
-        echo "Erreur de connexion à la base de données!";
+        error_log("Erreur de connexion à la base de données dans getRecentSearches");
         return [];
     }
 
     try {
         // Préparer et exécuter la requête pour récupérer les recherches récentes
-        $stmt = $pdo->prepare("SELECT city, temperature, description FROM searches ORDER BY created_at DESC LIMIT ?");
+        // Modification pour inclure la condition météo
+        $stmt = $pdo->prepare("SELECT city, temperature, `condition` FROM searches ORDER BY search_date DESC LIMIT ?");
         $stmt->execute([$limit]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
-        echo "Erreur SQL: " . $e->getMessage();
+        error_log("Erreur SQL dans getRecentSearches: " . $e->getMessage());
+        return [];
+    }
+}
+
+function getWeeklyForecast($pdo, $city) {
+    if (!$pdo) {
+        error_log("Erreur de connexion à la base de données dans getWeeklyForecast");
+        return [];
+    }
+
+    try {
+        // Récupérer les prévisions pour les 7 prochains jours pour la ville spécifiée
+        $stmt = $pdo->prepare("SELECT forecast_date, temperature, `condition`, humidity, precipitation, wind 
+                              FROM weather_forecasts 
+                              WHERE city = :city 
+                              ORDER BY forecast_date ASC 
+                              LIMIT 7");
+        $stmt->execute(['city' => $city]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        error_log("Erreur SQL dans getWeeklyForecast: " . $e->getMessage());
         return [];
     }
 }
@@ -42,51 +64,13 @@ if ($pdo) {
 
     try {
         $statement = $pdo->query($query);
-
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-        // Commenter ou supprimer la partie qui génère le tableau
-        /* if ($results) {
-            echo "<h2>Informations météorologiques</h2>";
-            echo "<table border='1'>
-                    <tr>
-                        <th>Nom du Lieu</th>
-                        <th>Latitude</th>
-                        <th>Longitude</th>
-                        <th>État</th>
-                        <th>Ville</th>
-                        <th>Température</th>
-                        <th>Précipitations</th>
-                        <th>Vent</th>
-                        <th>Humidité</th>
-                        <th>Jour</th>
-                        <th>Heure</th>
-                    </tr>";
-
-            foreach ($results as $row) {
-                echo "<tr>
-                        <td>" . htmlspecialchars($row['Place_Name']) . "</td>
-                        <td>" . htmlspecialchars($row['Latitude']) . "</td>
-                        <td>" . htmlspecialchars($row['Longitude']) . "</td>
-                        <td>" . htmlspecialchars($row['State']) . "</td>
-                        <td>" . htmlspecialchars($row['Town']) . "</td>
-                        <td>" . htmlspecialchars($row['temperature']) . "°C</td>
-                        <td>" . htmlspecialchars($row['precipitation']) . " mm</td>
-                        <td>" . htmlspecialchars($row['wind']) . " km/h</td>
-                        <td>" . htmlspecialchars($row['humidity']) . "%</td>
-                        <td>" . htmlspecialchars($row['day']) . "</td>
-                        <td>" . htmlspecialchars($row['hour']) . "</td>
-                    </tr>";
-            }
-            echo "</table>";
-        } else {
-            echo "Aucune donnée disponible.";
-        } */
-
+        // Pour déboguer
+        error_log("Résultats de la requête de base : " . json_encode($results));
     } catch (PDOException $e) {
-        echo "Erreur SQL: " . $e->getMessage();
+        error_log("Erreur SQL dans le bloc principal: " . $e->getMessage());
     }
 } else {
-    echo "Erreur de connexion à la base de données!";
+    error_log("Erreur de connexion à la base de données dans le bloc principal");
 }
 ?>
