@@ -31,10 +31,10 @@ function getWeeklyForecast($pdo, $city) {
     try {
         // Récupérer les prévisions pour les 7 prochains jours pour la ville spécifiée
         $stmt = $pdo->prepare("SELECT forecast_date, temperature, `condition`, humidity, precipitation, wind 
-                              FROM weather_forecasts 
-                              WHERE city = :city 
-                              ORDER BY forecast_date ASC 
-                              LIMIT 7");
+                            FROM weather_forecasts 
+                            WHERE city = :city 
+                            ORDER BY forecast_date ASC 
+                            LIMIT 7");
         $stmt->execute(['city' => $city]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {

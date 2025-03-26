@@ -19,7 +19,7 @@ if (!empty($_POST['city'])) {
         // Traduire les conditions météorologiques
         $conditions = [
             'Sunny' => 'Soleil ça brille les yeux carrément !',
-            'Partly cloudy' => 'Vif du ptit nuage mais trql',
+            'Partly Cloudy' => 'Vif du ptit nuage mais trql',
             'Cloudy' => 'Ptit temps nuageux il fait gris',
             'Overcast' => 'Couvert',
             'Mist' => 'Brume mystique',
@@ -41,7 +41,7 @@ if (!empty($_POST['city'])) {
         // Emoji pour chaque condition météo
         $weatherEmojis = [
             'Sunny' => '☀️',
-            'Partly cloudy' => '⛅',
+            'Partly Cloudy' => '⛅',
             'Cloudy' => '☁️',
             'Overcast' => '☁️',
             'Mist' => '🌫️',
@@ -331,7 +331,7 @@ if (!empty($_POST['city'])) {
         </header>
 
         <div class="nav-links">
-            <a href="index.php" class="nav-link">Météo Actuelle</a>
+            <a href="index.php" class="nav-link">Météo d'aujourd'hui</a>
         </div>
 
         <form method="POST">

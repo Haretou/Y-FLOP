@@ -1,17 +1,5 @@
 <?php
 require_once __DIR__ . '/../config.php';
-
-/**
- * Fonctions pour l'apprentissage automatique et l'analyse des données météorologiques
- */
-
-/**
- * Obtient les tendances de température pour une ville sur les dernières recherches
- * 
- * @param PDO $pdo Instance de connexion PDO
- * @param string $city Nom de la ville
- * @return array Données de tendance
- */
 function getTemperatureTrend($pdo, $city) {
     if (!$pdo) {
         return ['error' => 'Connexion à la base de données impossible'];
@@ -21,10 +9,10 @@ function getTemperatureTrend($pdo, $city) {
         // Récupérer l'historique des températures pour cette ville
         $stmt = $pdo->prepare(
             "SELECT temperature, search_date 
-             FROM searches 
-             WHERE city = :city 
-             ORDER BY search_date DESC 
-             LIMIT 30"
+            FROM searches 
+            WHERE city = :city 
+            ORDER BY search_date DESC 
+            LIMIT 30"
         );
         $stmt->execute(['city' => $city]);
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
