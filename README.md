@@ -133,9 +133,6 @@ L'application expose plusieurs points d'API REST :
 
 Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue pour signaler un bug ou proposer une amélioration, ou à soumettre une pull request.
 
-## 📜 Licence
-
-Ce projet est sous licence [MIT](LICENSE).
 
 ## 🙏 Remerciements
 
