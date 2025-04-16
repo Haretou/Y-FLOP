@@ -1,6 +1,4 @@
-/* static/css/style.css - Version améliorée */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
-
 :root {
     --primary-color: #48a0dc;
     --primary-gradient: linear-gradient(135deg, #48a0dc 0%, #3498db 100%);
@@ -31,7 +29,9 @@ body {
     overflow-x: hidden;
 }
 
+
 /* Animation des nuages en arrière-plan */
+
 body::before {
     content: '';
     position: fixed;
@@ -62,11 +62,17 @@ body::after {
 }
 
 @keyframes cloudMove {
-    from { background-position-x: 0; }
-    to { background-position-x: 1500px; }
+    from {
+        background-position-x: 0;
+    }
+    to {
+        background-position-x: 1500px;
+    }
 }
 
+
 /* Ajout d'un deuxième niveau de nuages pour plus de profondeur */
+
 .cloud-wrapper {
     position: fixed;
     top: 0;
@@ -107,18 +113,30 @@ body::after {
 }
 
 @keyframes cloud1 {
-    0% { left: -300px; }
-    100% { left: 100%; }
+    0% {
+        left: -300px;
+    }
+    100% {
+        left: 100%;
+    }
 }
 
 @keyframes cloud2 {
-    0% { left: -200px; }
-    100% { left: 100%; }
+    0% {
+        left: -200px;
+    }
+    100% {
+        left: 100%;
+    }
 }
 
 @keyframes cloud3 {
-    0% { left: -250px; }
-    100% { left: 100%; }
+    0% {
+        left: -250px;
+    }
+    100% {
+        left: 100%;
+    }
 }
 
 .container {
@@ -127,7 +145,9 @@ body::after {
     padding: 20px;
 }
 
+
 /* Header styles */
+
 header {
     text-align: center;
     margin-bottom: 40px;
@@ -152,7 +172,9 @@ header p {
     opacity: 0.9;
 }
 
+
 /* Animated weather icon in header */
+
 header::before {
     content: '';
     position: absolute;
@@ -167,11 +189,17 @@ header::before {
 }
 
 @keyframes rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
+
 /* Section styles */
+
 section {
     margin-bottom: 30px;
     padding: 25px;
@@ -201,7 +229,9 @@ h3 {
     margin-bottom: 15px;
 }
 
+
 /* Current weather styles */
+
 .current-weather .weather-card {
     display: flex;
     justify-content: space-between;
@@ -262,7 +292,9 @@ h3 {
     font-weight: 500;
 }
 
+
 /* Forecast styles */
+
 .forecast-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -314,7 +346,9 @@ h3 {
     margin-left: 10px;
 }
 
+
 /* Form styles */
+
 .form-group {
     margin-bottom: 20px;
 }
@@ -377,7 +411,9 @@ button:active {
     font-size: 1.2rem;
 }
 
+
 /* Prediction result */
+
 .prediction-result {
     margin-top: 25px;
     padding: 20px;
@@ -388,8 +424,14 @@ button:active {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .prediction-value {
@@ -399,7 +441,9 @@ button:active {
     margin: 10px 0;
 }
 
+
 /* Chart container */
+
 .chart-container {
     height: 350px;
     margin-top: 30px;
@@ -408,7 +452,9 @@ button:active {
     box-shadow: var(--box-shadow);
 }
 
+
 /* Search bar */
+
 .search-bar {
     position: relative;
     margin-bottom: 30px;
@@ -425,7 +471,8 @@ button:active {
 }
 
 .search-bar::before {
-    content: '\1F50D'; /* Unicode for magnifying glass */
+    content: '\1F50D';
+    /* Unicode for magnifying glass */
     position: absolute;
     left: 15px;
     top: 50%;
@@ -434,7 +481,9 @@ button:active {
     color: var(--light-text);
 }
 
+
 /* Weather icons */
+
 .icon-container {
     position: relative;
     height: 100px;
@@ -442,7 +491,9 @@ button:active {
     margin: 0 auto 20px;
 }
 
+
 /* Footer */
+
 footer {
     text-align: center;
     padding: 25px 0;
@@ -460,31 +511,28 @@ footer a:hover {
     text-decoration: underline;
 }
 
+
 /* Responsive styles */
+
 @media (max-width: 768px) {
     .current-weather .weather-card {
         flex-direction: column;
         text-align: center;
     }
-    
     .weather-details {
         text-align: center;
         margin-top: 20px;
     }
-    
     .weather-details li {
         justify-content: center;
     }
-    
     .forecast-container {
         grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
         gap: 15px;
     }
-    
     header h1 {
         font-size: 2rem;
     }
-    
     .temperature {
         font-size: 3.5rem;
     }
@@ -494,33 +542,40 @@ footer a:hover {
     section {
         padding: 20px 15px;
     }
-    
     header {
         padding: 20px 10px;
     }
-    
     .forecast-container {
         grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
         gap: 10px;
     }
-    
     h2 {
         font-size: 1.5rem;
     }
 }
 
+
 /* Animation for loading data */
+
 @keyframes pulse {
-    0% { opacity: 0.6; }
-    50% { opacity: 1; }
-    100% { opacity: 0.6; }
+    0% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.6;
+    }
 }
 
 .loading {
     animation: pulse 1.5s infinite;
 }
 
+
 /* Weather icons styling */
+
 .weather-icon-sunny {
     color: #f39c12;
 }
@@ -537,7 +592,9 @@ footer a:hover {
     color: #bdc3c7;
 }
 
+
 /* Alerts and notifications */
+
 .weather-alert {
     background-color: #fff3cd;
     border-left: 4px solid #ffc107;
@@ -563,7 +620,9 @@ footer a:hover {
     margin-bottom: 5px;
 }
 
+
 /* Interactive elements */
+
 .city-chip {
     display: inline-block;
     padding: 8px 15px;
@@ -586,7 +645,9 @@ footer a:hover {
     color: white;
 }
 
+
 /* Dark mode toggle */
+
 .dark-mode-toggle {
     position: fixed;
     bottom: 20px;
@@ -608,7 +669,9 @@ footer a:hover {
     transform: scale(1.1);
 }
 
+
 /* Add dark mode styles if needed */
+
 .dark-mode {
     --background-color: #1a202c;
     --card-bg: #2d3748;
@@ -634,7 +697,9 @@ footer a:hover {
     border-left-color: #d69e2e;
 }
 
+
 /* Ajustements pour le mode sombre avec nuages */
+
 .dark-mode body::before {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='600' viewBox='0 0 900 600' style='opacity:0.1'%3E%3Cpath fill='%23FFFFFF' d='M0 260 Q100 230 180 260 Q250 290 300 270 Q380 240 450 260 Q520 280 580 250 Q650 220 720 250 Q780 280 850 260 Q920 240 1000 270 L1000 0 L0 0 Z'%3E%3C/path%3E%3Cpath fill='%23FFFFFF' d='M0 170 Q70 190 150 170 Q230 150 300 180 Q370 210 430 180 Q490 150 550 170 Q620 190 680 170 Q740 150 800 180 Q860 210 930 180 L930 0 L0 0 Z'%3E%3C/path%3E%3C/svg%3E");
 }
@@ -666,7 +731,9 @@ footer a:hover {
     opacity: 0.8;
 }
 
+
 /* Version responsive */
+
 @media (max-width: 768px) {
     .current-date {
         text-align: center;

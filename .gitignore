@@ -1,0 +1,5 @@
+# Ignorer tous les CSV
+*.csv
+
+# Mais inclure celui-ci
+!example_data.csv
