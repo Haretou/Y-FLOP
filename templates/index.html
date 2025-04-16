@@ -1,0 +1,130 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prévisions Y-FLOP</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Ajout de la div pour l'effet de nuages -->
+    <div class="cloud-wrapper">
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+        <div class="cloud cloud-3"></div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1>Y-FLOP Predict</h1>
+            <div class="search-container">
+                <input type="text" id="city-search" placeholder="Rechercher une commune...">
+                <div id="search-results" class="search-results"></div>
+            </div>
+        </header>
+        
+        <main>
+            <section class="city-selector">
+                <h2>Communes populaires</h2>
+                <div class="city-list">
+                    {% for city in cities[:6] %}
+                    <div class="city-item" onclick="loadCommuneWeather('{{ city }}')">{{ city }}</div>
+                    {% endfor %}
+                </div>
+            </section>
+            
+            
+            <section class="current-weather">
+                <h2>Météo à <span id="city-name">--</span></h2>
+                
+                <div class="weather-card">
+                    <div class="weather-info">
+                        <div class="current-date">
+                            <span id="current-day">--</span>
+                            <span id="current-date">--</span>
+                        </div>
+                        <div class="temperature">
+                            <span id="current-temp">--</span>
+                        </div>
+                        <div class="details">
+                            <p>Humidité: <span id="current-humidity">--</span>%</p>
+                            <p>Précipitations: <span id="current-precipitation">--</span> mm</p>
+                            <p>Vent: <span id="current-wind">--</span> km/h</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="forecast">
+                <h2>Prévisions pour <span id="forecast-city-name">--</span></h2>
+                <div class="forecast-container" id="forecast-container">
+                    <!-- Les prévisions seront insérées ici via JavaScript -->
+                </div>
+                <div class="chart-container">
+                    <canvas id="temperature-chart"></canvas>
+                </div>
+            </section>
+            
+            <section class="predict-form">
+                <h2>Faire une prédiction personnalisée</h2>
+                <form id="prediction-form">
+                    <div class="form-group">
+                        <label for="min-temp">Température minimale (°C):</label>
+                        <input type="number" id="min-temp" name="minimum_temperature_at_2_metres" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="max-temp">Température maximale (°C):</label>
+                        <input type="number" id="max-temp" name="maximum_temperature_at_2_metres" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="humidity">Humidité (%):</label>
+                        <input type="number" id="humidity" name="2_metre_relative_humidity" min="0" max="100" step="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="precipitation">Précipitations (mm):</label>
+                        <input type="number" id="precipitation" name="total_precipitation" min="0" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="wind-speed">Vitesse du vent (m/s):</label>
+                        <input type="number" id="wind-speed" name="10m_wind_speed" min="0" step="0.1" required>
+                    </div>
+                    <!-- Vous pouvez ajouter les autres champs ici -->
+                    
+                    <button type="submit">Prédire la température</button>
+                </form>
+                <div class="prediction-result" id="prediction-result" style="display: none;">
+                    <h3>Température prédite: <span id="predicted-temp">--</span>°C</h3>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>&copy; 2025 MeteoPredict - Projet de Prévisions Météorologiques</p>
+        </footer>
+    </div>
+
+    <!-- Ajout d'un bouton pour basculer le mode sombre -->
+    <div class="dark-mode-toggle" id="dark-mode-toggle" title="Basculer mode sombre/clair">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-moon">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    
+    <!-- Script pour le mode sombre -->
+    <script>
+        document.getElementById('dark-mode-toggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        });
+        
+        // Vérifier le mode préféré au chargement
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+    </script>
+</body>
+</html>
