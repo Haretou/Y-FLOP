@@ -2,8 +2,6 @@
 
 Y-FLOP Predict est une application web de prévisions météorologiques qui permet de consulter la météo actuelle et les prévisions pour différentes communes françaises, ainsi que de faire des prédictions personnalisées basées sur un modèle d'apprentissage automatique.
 
-![Y-FLOP Predict](https://github.com/yourusername/y-flop-predict/raw/main/screenshot.png)
-
 ## 🌦️ Caractéristiques
 
 - **Consultation de la météo actuelle** pour n'importe quelle commune en France
