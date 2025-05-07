@@ -1,0 +1,100 @@
+2025-05-07 11:38:46,072 - __main__ - WARNING - Fichier de configuration config.yaml non trouvé. Utilisation des valeurs par défaut.
+2025-05-07 11:38:46,072 - __main__ - INFO - Répertoire créé: results
+2025-05-07 11:38:54,307 - __main__ - INFO - Données chargées avec succès: 1466679 échantillons d'entraînement, 314288 échantillons de validation, 314289 échantillons de test
+2025-05-07 11:38:54,307 - __main__ - INFO - 
+==================================================
+2025-05-07 11:38:54,307 - __main__ - INFO - Entraînement du modèle pour la cible: 2_metre_temperature
+2025-05-07 11:38:54,307 - __main__ - INFO - ==================================================
+2025-05-07 11:38:54,766 - __main__ - INFO - Entraînement du modèle LinearRegression
+2025-05-07 11:38:55,186 - __main__ - INFO - Performance sur l'ensemble d'entraînement:
+2025-05-07 11:38:55,186 - __main__ - INFO -   MAE: 0.1689
+2025-05-07 11:38:55,186 - __main__ - INFO -   MSE: 0.0517
+2025-05-07 11:38:55,186 - __main__ - INFO -   RMSE: 0.2273
+2025-05-07 11:38:55,186 - __main__ - INFO -   R²: 0.9816
+2025-05-07 11:38:55,186 - __main__ - INFO - Performance sur l'ensemble de validation:
+2025-05-07 11:38:55,187 - __main__ - INFO -   MAE: 0.1691
+2025-05-07 11:38:55,187 - __main__ - INFO -   MSE: 0.0517
+2025-05-07 11:38:55,187 - __main__ - INFO -   RMSE: 0.2273
+2025-05-07 11:38:55,187 - __main__ - INFO -   R²: 0.9816
+2025-05-07 11:38:55,187 - __main__ - INFO - Temps d'entraînement: 0.36 secondes
+2025-05-07 11:38:55,198 - __main__ - INFO - Performance sur l'ensemble de test:
+2025-05-07 11:38:55,199 - __main__ - INFO -   MAE: 0.1691
+2025-05-07 11:38:55,199 - __main__ - INFO -   MSE: 0.0517
+2025-05-07 11:38:55,199 - __main__ - INFO -   RMSE: 0.2273
+2025-05-07 11:38:55,199 - __main__ - INFO -   R²: 0.9817
+2025-05-07 11:38:59,891 - __main__ - INFO - Visualisations sauvegardées dans results/2_metre_temperature_results.png
+2025-05-07 11:38:59,897 - __main__ - INFO - Modèle sauvegardé dans models/meteo_model_2_metre_temperature.pkl
+2025-05-07 11:38:59,897 - __main__ - INFO - 
+==================================================
+2025-05-07 11:38:59,897 - __main__ - INFO - Entraînement du modèle pour la cible: 2_metre_dewpoint_temperature
+2025-05-07 11:38:59,897 - __main__ - INFO - ==================================================
+2025-05-07 11:38:59,897 - __main__ - ERROR - La cible '2_metre_dewpoint_temperature' n'existe pas dans les données d'entraînement.
+2025-05-07 11:38:59,897 - __main__ - INFO - 
+==================================================
+2025-05-07 11:38:59,897 - __main__ - INFO - Entraînement du modèle pour la cible: total_precipitation
+2025-05-07 11:38:59,897 - __main__ - INFO - ==================================================
+2025-05-07 11:39:00,373 - __main__ - INFO - Entraînement du modèle LinearRegression
+2025-05-07 11:39:00,760 - __main__ - INFO - Performance sur l'ensemble d'entraînement:
+2025-05-07 11:39:00,761 - __main__ - INFO -   MAE: 0.0000
+2025-05-07 11:39:00,761 - __main__ - INFO -   MSE: 0.0000
+2025-05-07 11:39:00,761 - __main__ - INFO -   RMSE: 0.0000
+2025-05-07 11:39:00,761 - __main__ - INFO -   R²: 1.0000
+2025-05-07 11:39:00,761 - __main__ - INFO - Performance sur l'ensemble de validation:
+2025-05-07 11:39:00,761 - __main__ - INFO -   MAE: 0.0000
+2025-05-07 11:39:00,761 - __main__ - INFO -   MSE: 0.0000
+2025-05-07 11:39:00,761 - __main__ - INFO -   RMSE: 0.0000
+2025-05-07 11:39:00,761 - __main__ - INFO -   R²: 1.0000
+2025-05-07 11:39:00,761 - __main__ - INFO - Temps d'entraînement: 0.31 secondes
+2025-05-07 11:39:00,775 - __main__ - INFO - Performance sur l'ensemble de test:
+2025-05-07 11:39:00,775 - __main__ - INFO -   MAE: 0.0000
+2025-05-07 11:39:00,775 - __main__ - INFO -   MSE: 0.0000
+2025-05-07 11:39:00,775 - __main__ - INFO -   RMSE: 0.0000
+2025-05-07 11:39:00,775 - __main__ - INFO -   R²: 1.0000
+2025-05-07 11:39:04,073 - __main__ - INFO - Visualisations sauvegardées dans results/total_precipitation_results.png
+2025-05-07 11:39:04,079 - __main__ - INFO - Modèle sauvegardé dans models/meteo_model_total_precipitation.pkl
+2025-05-07 11:39:04,079 - __main__ - INFO - 
+==================================================
+2025-05-07 11:39:04,079 - __main__ - INFO - Entraînement du modèle pour la cible: surface_net_solar_radiation
+2025-05-07 11:39:04,080 - __main__ - INFO - ==================================================
+2025-05-07 11:39:04,496 - __main__ - INFO - Entraînement du modèle LinearRegression
+2025-05-07 11:39:04,859 - __main__ - INFO - Performance sur l'ensemble d'entraînement:
+2025-05-07 11:39:04,859 - __main__ - INFO -   MAE: 0.0000
+2025-05-07 11:39:04,860 - __main__ - INFO -   MSE: 0.0000
+2025-05-07 11:39:04,860 - __main__ - INFO -   RMSE: 0.0000
+2025-05-07 11:39:04,860 - __main__ - INFO -   R²: 1.0000
+2025-05-07 11:39:04,860 - __main__ - INFO - Performance sur l'ensemble de validation:
+2025-05-07 11:39:04,860 - __main__ - INFO -   MAE: 0.0000
+2025-05-07 11:39:04,860 - __main__ - INFO -   MSE: 0.0000
+2025-05-07 11:39:04,860 - __main__ - INFO -   RMSE: 0.0000
+2025-05-07 11:39:04,860 - __main__ - INFO -   R²: 1.0000
+2025-05-07 11:39:04,860 - __main__ - INFO - Temps d'entraînement: 0.30 secondes
+2025-05-07 11:39:04,872 - __main__ - INFO - Performance sur l'ensemble de test:
+2025-05-07 11:39:04,873 - __main__ - INFO -   MAE: 0.0000
+2025-05-07 11:39:04,873 - __main__ - INFO -   MSE: 0.0000
+2025-05-07 11:39:04,873 - __main__ - INFO -   RMSE: 0.0000
+2025-05-07 11:39:04,873 - __main__ - INFO -   R²: 1.0000
+2025-05-07 11:39:08,047 - __main__ - INFO - Visualisations sauvegardées dans results/surface_net_solar_radiation_results.png
+2025-05-07 11:39:08,052 - __main__ - INFO - Modèle sauvegardé dans models/meteo_model_surface_net_solar_radiation.pkl
+2025-05-07 11:39:08,052 - __main__ - INFO - 
+==================================================
+2025-05-07 11:39:08,052 - __main__ - INFO - Entraînement du modèle pour la cible: surface_net_thermal_radiation
+2025-05-07 11:39:08,052 - __main__ - INFO - ==================================================
+2025-05-07 11:39:08,458 - __main__ - INFO - Entraînement du modèle LinearRegression
+2025-05-07 11:39:08,816 - __main__ - INFO - Performance sur l'ensemble d'entraînement:
+2025-05-07 11:39:08,817 - __main__ - INFO -   MAE: 0.0000
+2025-05-07 11:39:08,817 - __main__ - INFO -   MSE: 0.0000
+2025-05-07 11:39:08,817 - __main__ - INFO -   RMSE: 0.0000
+2025-05-07 11:39:08,817 - __main__ - INFO -   R²: 1.0000
+2025-05-07 11:39:08,817 - __main__ - INFO - Performance sur l'ensemble de validation:
+2025-05-07 11:39:08,817 - __main__ - INFO -   MAE: 0.0000
+2025-05-07 11:39:08,817 - __main__ - INFO -   MSE: 0.0000
+2025-05-07 11:39:08,817 - __main__ - INFO -   RMSE: 0.0000
+2025-05-07 11:39:08,817 - __main__ - INFO -   R²: 1.0000
+2025-05-07 11:39:08,817 - __main__ - INFO - Temps d'entraînement: 0.29 secondes
+2025-05-07 11:39:08,831 - __main__ - INFO - Performance sur l'ensemble de test:
+2025-05-07 11:39:08,831 - __main__ - INFO -   MAE: 0.0000
+2025-05-07 11:39:08,831 - __main__ - INFO -   MSE: 0.0000
+2025-05-07 11:39:08,831 - __main__ - INFO -   RMSE: 0.0000
+2025-05-07 11:39:08,831 - __main__ - INFO -   R²: 1.0000
+2025-05-07 11:39:11,893 - __main__ - INFO - Visualisations sauvegardées dans results/surface_net_thermal_radiation_results.png
+2025-05-07 11:39:11,899 - __main__ - INFO - Modèle sauvegardé dans models/meteo_model_surface_net_thermal_radiation.pkl
